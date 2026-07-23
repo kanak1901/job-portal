@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Jobs - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="fw-bold mb-4">Browse Jobs</h1>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="q" class="form-control" placeholder="Job title or keyword"
+                           value="{{ query }}">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="location" class="form-control" placeholder="Location"
+                           value="{{ location }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="job_type" class="form-select">
+                        <option value="">All Job Types</option>
+                        {% for value, label in job_type_choices %}
+                        <option value="{{ value }}" {% if job_type == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search me-1"></i>Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if jobs %}
+    <p class="text-muted mb-3">{{ jobs.count }} job{{ jobs.count|pluralize }} found</p>
+    <div class="row g-4">
+        {% for job in jobs %}
+        <div class="col-md-6">
+            <div class="card job-card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-primary-subtle text-primary">{{ job.get_job_type_display }}</span>
+                        <small class="text-muted">{{ job.created_at|timesince }} ago</small>
+                    </div>
+                    <h5 class="card-title fw-bold">{{ job.title }}</h5>
+                    <p class="text-muted mb-1"><i class="bi bi-building me-1"></i>{{ job.company }}</p>
+                    <p class="text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>{{ job.location }}</p>
+                    {% if job.salary %}
+                    <p class="text-success mb-3"><i class="bi bi-cash me-1"></i>{{ job.salary }}</p>
+                    {% endif %}
+                    <p class="card-text text-muted">{{ job.description|truncatewords:25 }}</p>
+                    <a href="{% url 'job_detail' job.pk %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-search display-4 text-muted d-block mb-3"></i>
+        <h4 class="text-muted">No jobs found</h4>
+        <p class="text-muted">Try adjusting your search filters.</p>
+        <a href="{% url 'job_list' %}" class="btn btn-primary">Clear Filters</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

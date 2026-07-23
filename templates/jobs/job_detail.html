@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <span class="badge bg-primary mb-3">{{ job.get_job_type_display }}</span>
+                    <h1 class="fw-bold mb-2">{{ job.title }}</h1>
+                    <p class="text-muted fs-5 mb-3">
+                        <i class="bi bi-building me-1"></i>{{ job.company }}
+                        <span class="mx-2">|</span>
+                        <i class="bi bi-geo-alt me-1"></i>{{ job.location }}
+                    </p>
+                    {% if job.salary %}
+                    <p class="text-success fs-5 mb-4"><i class="bi bi-cash me-1"></i>{{ job.salary }}</p>
+                    {% endif %}
+
+                    <hr>
+
+                    <h4 class="fw-bold mt-4">Job Description</h4>
+                    <p class="text-muted" style="white-space: pre-line;">{{ job.description }}</p>
+
+                    <h4 class="fw-bold mt-4">Requirements</h4>
+                    <p class="text-muted" style="white-space: pre-line;">{{ job.requirements }}</p>
+
+                    <p class="text-muted mt-4">
+                        <small>Posted {{ job.created_at|timesince }} ago</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 80px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Apply for this Job</h5>
+                    {% if user.is_authenticated %}
+                        {% if user.profile and user.profile.is_employer %}
+                        <p class="text-muted">Employers cannot apply for jobs.</p>
+                        {% elif has_applied %}
+                        <div class="alert alert-success mb-0">
+                            <i class="bi bi-check-circle me-1"></i>You have already applied.
+                        </div>
+                        {% else %}
+                        <a href="{% url 'apply_job' job.pk %}" class="btn btn-primary w-100 btn-lg">
+                            <i class="bi bi-send me-2"></i>Apply Now
+                        </a>
+                        {% endif %}
+                    {% else %}
+                    <p class="text-muted mb-3">Login or register to apply for this position.</p>
+                    <a href="{% url 'login' %}?next={% url 'apply_job' job.pk %}" class="btn btn-primary w-100 mb-2">Login to Apply</a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-primary w-100">Create Account</a>
+                    {% endif %}
+                    <hr>
+                    <a href="{% url 'job_list' %}" class="btn btn-link w-100">
+                        <i class="bi bi-arrow-left me-1"></i>Back to Jobs
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

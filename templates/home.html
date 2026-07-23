@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Job Portal{% endblock %}
+
+{% block content %}
+<section class="hero-section text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">Find Your Dream Job Today</h1>
+                <p class="lead mb-4">
+                    Discover {{ total_jobs }}+ opportunities from leading companies.
+                    Register, apply, and take the next step in your career.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'job_list' %}" class="btn btn-light btn-lg px-4">
+                        <i class="bi bi-search me-2"></i>Browse Jobs
+                    </a>
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-person-plus me-2"></i>Get Started
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <i class="bi bi-laptop display-1 opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <i class="bi bi-search-heart text-primary display-6 mb-3"></i>
+                    <h5 class="fw-bold">Search Jobs</h5>
+                    <p class="text-muted mb-0">Filter by location, type, and keywords to find the perfect match.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <i class="bi bi-file-earmark-person text-primary display-6 mb-3"></i>
+                    <h5 class="fw-bold">Apply Online</h5>
+                    <p class="text-muted mb-0">Submit your application with cover letter and resume in minutes.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 p-4">
+                    <i class="bi bi-building text-primary display-6 mb-3"></i>
+                    <h5 class="fw-bold">For Employers</h5>
+                    <p class="text-muted mb-0">Post jobs and manage applications from your employer dashboard.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">Latest Job Openings</h2>
+            <a href="{% url 'job_list' %}" class="btn btn-outline-primary">View All Jobs</a>
+        </div>
+        {% if featured_jobs %}
+        <div class="row g-4">
+            {% for job in featured_jobs %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card job-card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <span class="badge bg-primary-subtle text-primary mb-2">{{ job.get_job_type_display }}</span>
+                        <h5 class="card-title fw-bold">{{ job.title }}</h5>
+                        <p class="text-muted mb-2">
+                            <i class="bi bi-building me-1"></i>{{ job.company }}
+                        </p>
+                        <p class="text-muted mb-2">
+                            <i class="bi bi-geo-alt me-1"></i>{{ job.location }}
+                        </p>
+                        {% if job.salary %}
+                        <p class="text-success mb-3">
+                            <i class="bi bi-currency-rupee me-1"></i>{{ job.salary }}
+                        </p>
+                        {% endif %}
+                        <a href="{% url 'job_detail' job.pk %}" class="btn btn-primary btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-inbox display-4 d-block mb-3"></i>
+            <p>No jobs posted yet. Employers can post jobs from the dashboard.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Are You an Employer?</h2>
+        <p class="lead mb-4">Post job openings and reach thousands of qualified candidates.</p>
+        <a href="{% url 'employer_register' %}" class="btn btn-light btn-lg me-2">Register as Employer</a>
+        <a href="{% url 'employer_login' %}" class="btn btn-outline-light btn-lg">Employer Login</a>
+    </div>
+</section>
+{% endblock %}

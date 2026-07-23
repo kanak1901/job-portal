@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Employer Dashboard - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-1">Employer Dashboard</h1>
+            <p class="text-muted mb-0">Welcome, {{ profile.company_name|default:user.username }}</p>
+        </div>
+        <a href="{% url 'post_job' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i>Post New Job
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0">Your Job Postings</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if jobs %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                    <th>Posted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for job in jobs %}
+                                <tr>
+                                    <td><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></td>
+                                    <td>{{ job.location }}</td>
+                                    <td>
+                                        {% if job.is_active %}
+                                        <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ job.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <p>No jobs posted yet.</p>
+                        <a href="{% url 'post_job' %}" class="btn btn-primary btn-sm">Post Your First Job</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0">Recent Applications</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if applications %}
+                    <div class="list-group list-group-flush">
+                        {% for app in applications|slice:":10" %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ app.applicant.get_full_name|default:app.applicant.username }}</strong>
+                                <span class="badge bg-{% if app.status == 'pending' %}warning{% elif app.status == 'accepted' %}success{% elif app.status == 'rejected' %}danger{% else %}info{% endif %}">
+                                    {{ app.get_status_display }}
+                                </span>
+                            </div>
+                            <small class="text-muted">Applied for {{ app.job.title }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <p>No applications yet.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+<footer class="bg-dark text-light py-5 mt-auto">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-briefcase-fill me-2"></i>JobPortal
+                </h5>
+                <p class="text-secondary">
+                    Connect with top employers and find your dream job. Browse thousands of opportunities across industries.
+                </p>
+            </div>
+            <div class="col-md-2">
+                <h6 class="fw-bold mb-3">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'home' %}" class="text-secondary text-decoration-none">Home</a></li>
+                    <li><a href="{% url 'job_list' %}" class="text-secondary text-decoration-none">Browse Jobs</a></li>
+                    <li><a href="{% url 'register' %}" class="text-secondary text-decoration-none">Register</a></li>
+                    <li><a href="{% url 'login' %}" class="text-secondary text-decoration-none">Login</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6 class="fw-bold mb-3">For Employers</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'employer_login' %}" class="text-secondary text-decoration-none">Employer Login</a></li>
+                    <li><a href="{% url 'employer_register' %}" class="text-secondary text-decoration-none">Register as Employer</a></li>
+                    <li><a href="{% url 'post_job' %}" class="text-secondary text-decoration-none">Post a Job</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6 class="fw-bold mb-3">Contact</h6>
+                <ul class="list-unstyled text-secondary">
+                    <li><i class="bi bi-envelope me-2"></i>support@jobportal.com</li>
+                    <li><i class="bi bi-telephone me-2"></i>+91 98765 43210</li>
+                    <li><i class="bi bi-geo-alt me-2"></i>India</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="border-secondary my-4">
+        <div class="text-center text-secondary">
+            <small>&copy; 2026 JobPortal. All rights reserved. | Internship Project</small>
+        </div>
+    </div>
+</footer>
